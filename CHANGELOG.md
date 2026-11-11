@@ -2,7 +2,7 @@
 
 ## 0.1.0 — 2026-11-11 · first public preview
 
-The first downloadable build (macOS, Apple Silicon, not notarized).
+The first downloadable build (macOS, Apple Silicon), signed with a Developer ID and notarized by Apple.
 
 ### Workspace
 - Terminal-first layout: terminals fill the window; simulator, side panel and editor open on demand.

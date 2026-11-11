@@ -1,0 +1,9 @@
+#!/bin/sh
+# Apple's timestamp server drops some requests; retry instead of failing the whole build.
+for attempt in 1 2 3 4 5 6; do
+  /usr/bin/codesign "$@"
+  status=$?
+  [ "$status" -eq 0 ] && exit 0
+  sleep 2
+done
+exit "$status"

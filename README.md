@@ -80,12 +80,7 @@ Everything else an IDE has (files, an editor, git, diffs) is there, but out of t
 
 1. Download **`Flutvio-<version>-mac-arm64.dmg`** from the [latest release](https://github.com/haithemnini/flutvio/releases/latest).
 2. Open it and drag **Flutvio** to **Applications**.
-3. First launch only — this preview is **not notarized by Apple yet**, so macOS blocks it until you allow it. Either:
-   - run this once in Terminal:
-     ```bash
-     xattr -dr com.apple.quarantine /Applications/Flutvio.app
-     ```
-   - or open the app, dismiss the warning, then go to **System Settings › Privacy & Security** and click **Open Anyway**.
+3. Launch it. The app is signed with a Developer ID and **notarized by Apple**, so it opens without warnings.
 
 The app is open source and built from this repository; you can also [build it yourself](#build-from-source). Each release lists SHA-256 checksums.
 
@@ -190,7 +185,6 @@ The renderer never touches Node APIs; every capability goes through the typed br
 
 Flutvio **0.1.0 is a first public preview** — expect rough edges.
 
-- **Not notarized** — first launch needs the step in [Install](#install).
 - **Apple Silicon only** for the downloadable build.
 - **Only the iOS Simulator is embedded and tested.** Other devices Flutter lists (physical iPhones, Android, macOS) can be selected and run, but are not mirrored in the window and have not been verified.
 - **One project per window.**
@@ -201,7 +195,7 @@ Flutvio **0.1.0 is a first public preview** — expect rough edges.
 
 ## Roadmap
 
-- Apple notarization and a universal (Intel + Apple Silicon) build
+- A universal (Intel + Apple Silicon) build
 - Several projects in one window, with agent status per project
 - Android emulator mirroring (scrcpy)
 - Terminal search, session restore

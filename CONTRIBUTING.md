@@ -51,7 +51,7 @@ npm run dev
 npm run dist
 ```
 
-Produces `release/Flutvio-<version>-mac-arm64.dmg` and `.zip`, ad-hoc signed (`scripts/after-pack.cjs`). Notarization is not set up yet.
+Produces `release/Flutvio-<version>-mac-arm64.dmg` and `.zip`, signed with a Developer ID and notarized (`scripts/notarize.cjs`, keychain profile `flutvio-notary`). Without that certificate and profile, set `"identity": null` and remove `afterSign` to build locally.
 
 ## Reporting bugs
 

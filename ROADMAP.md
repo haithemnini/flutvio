@@ -84,9 +84,10 @@ If xterm.js cannot handle bidirectional text at acceptable quality → the RTL f
 ## Phase 4 · Website + Launch
 **Duration:** 1–2 weeks
 
-- [x] Open source on GitHub (MIT), README, first downloadable build (0.1.0, Apple Silicon, not notarized)
+- [x] Open source on GitHub (MIT), README, first downloadable build (0.1.0, Apple Silicon)
 - [ ] Landing page with a direct download
-- [ ] Apple notarization, universal build, auto-update
+- [x] Apple notarization (Developer ID)
+- [ ] Universal build, auto-update
 - [ ] Demo video + launch
 
 ---
