@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Terminal-first macOS workspace for Flutter: any AI coding agent, wired to the iOS Simulator",
   "main": "./out/main/index.js",
-  "homepage": "https://github.com/haithemnini/flutvio",
+  "homepage": "https://flutvio.com",
   "author": "Haithem Nini",
   "license": "MIT",
   "scripts": {
