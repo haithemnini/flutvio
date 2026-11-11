@@ -12,7 +12,7 @@
 ![Electron](https://img.shields.io/badge/Electron-45-47848f)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[**Download for macOS**](https://github.com/haithemnini/flutvio/releases/latest) · [Features](#features) · [Install](#install) · [The `flutvio` command](#the-flutvio-command) · [Roadmap](#roadmap)
+[**Download for macOS**](https://github.com/haithemnini/flutvio/releases/latest) · [Website](https://flutvio.com) · [Features](#features) · [Install](#install) · [The `flutvio` command](#the-flutvio-command) · [Roadmap](#roadmap)
 
 <img src="docs/screenshots/hero.png" alt="Flutvio: Claude Code in the terminal, the iOS Simulator beside it, and the Agent panel showing context usage" />
 
