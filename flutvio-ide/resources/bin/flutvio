@@ -1,0 +1,41 @@
+#!/bin/sh
+# flutvio — see and drive the simulator and the running Flutter app from a Flutvio terminal.
+# Talks to the Flutvio app over 127.0.0.1 (see src/main/agentBridge.ts). Run: flutvio help
+
+if [ -z "$FLUTVIO_PORT" ] || [ -z "$FLUTVIO_TOKEN" ]; then
+  echo "flutvio: this command only works inside a Flutvio terminal." >&2
+  exit 2
+fi
+
+[ $# -eq 0 ] && set -- help
+
+# POSIX sh has no arrays: rotate the arguments into curl flags (spaces and quotes stay intact).
+n=$#
+while [ "$n" -gt 0 ]; do
+  a=$1
+  shift
+  set -- "$@" --data-urlencode "a=$a"
+  n=$((n - 1))
+done
+
+tmp=$(mktemp -t flutvio) || exit 1
+trap 'rm -f "$tmp"' EXIT
+
+code=$(curl -sS -o "$tmp" -w '%{http_code}' --max-time 330 \
+  -X POST "http://127.0.0.1:$FLUTVIO_PORT/cmd" \
+  -H "x-flutvio-token: $FLUTVIO_TOKEN" \
+  --data-urlencode "cwd=$PWD" "$@" 2>/dev/null)
+
+if [ "$code" = "200" ]; then
+  cat "$tmp"
+  echo
+  exit 0
+fi
+if [ "$code" = "000" ] || [ -z "$code" ]; then
+  echo "flutvio: can't reach the Flutvio app (is it still open?)." >&2
+  exit 1
+fi
+printf 'flutvio: ' >&2
+cat "$tmp" >&2
+echo >&2
+exit 1

@@ -1,0 +1,148 @@
+/* Fonts are bundled (see main.tsx) — the CSP blocks remote font CSS. */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  /* Default (Dark) tokens — replaced at runtime by the active theme (lib/themes.ts). */
+  :root {
+    --surface-0: 20 20 22;
+    --surface-3: 28 28 31;
+    --surface-4: 35 35 39;
+    --border-subtle: 33 33 37;
+    --border-default: 42 42 46;
+    --border-strong: 58 58 64;
+    --text-primary: 230 230 232;
+    --text-secondary: 161 161 167;
+    --text-tertiary: 109 109 116;
+    --text-disabled: 69 69 75;
+    --accent-blue: 77 140 245;
+    --accent-purple: 139 108 255;
+    --accent-green: 63 185 127;
+    --accent-orange: 224 160 48;
+    --accent-red: 229 83 75;
+    color-scheme: dark;
+  }
+
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body {
+    background-color: rgb(var(--surface-0));
+    color: rgb(var(--text-primary));
+    font-family: 'Inter', 'IBM Plex Sans Arabic', system-ui, sans-serif;
+    font-size: 12px;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-app-region: no-drag;
+    user-select: none;
+  }
+
+  button {
+    cursor: default;
+  }
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 1.5px solid rgba(91, 147, 247, 0.7);
+    outline-offset: -1.5px;
+  }
+
+  /* Allow text selection inside terminal and editor */
+  .xterm, .xterm *, .monaco-editor * {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-corner { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--text-primary) / 0.1);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background-color: rgb(var(--text-primary) / 0.2); }
+}
+
+@layer components {
+  .drag { -webkit-app-region: drag; }
+  .no-drag { -webkit-app-region: no-drag; }
+
+  /* Small square icon button used in toolbars and panel headers. */
+  .icon-btn {
+    @apply flex h-6 w-6 flex-shrink-0 items-center justify-center rounded text-text-tertiary transition-colors hover:bg-surface-4 hover:text-text-primary disabled:pointer-events-none disabled:opacity-30;
+  }
+  .icon-btn[aria-pressed='true'] {
+    /* "On" = brighter icon, no pressed-looking background. */
+    @apply text-text-primary;
+  }
+
+  .panel-title {
+    @apply text-[10.5px] font-medium uppercase tracking-[0.06em] text-text-tertiary;
+  }
+
+  .kbd {
+    @apply rounded border border-border-default bg-surface-3 px-1 font-mono text-2xs text-text-secondary;
+  }
+}
+
+/* Tooltip — any element with data-tip shows it on hover. */
+[data-tip] { position: relative; }
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgb(var(--surface-4));
+  color: rgb(var(--text-primary));
+  font-size: 11px;
+  line-height: 16px;
+  border: 1px solid rgb(var(--border-default));
+  pointer-events: none;
+  z-index: 60;
+  animation: fadeIn 0.12s ease-out 0.35s both;
+}
+[data-tip-pos='top']:hover::after {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+@keyframes toastBar {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/*
+ * RTL Approach D: xterm's DOM renderer makes every span inline-block, which
+ * isolates each color/cursor span for bidi. Arabic words then break apart
+ * around the cursor. Inline spans let Chromium order the whole row at once.
+ */
+.rtl-inline .xterm-rows span {
+  display: inline !important;
+}
+
+/* Horizontal tab strips scroll without showing a bar. */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

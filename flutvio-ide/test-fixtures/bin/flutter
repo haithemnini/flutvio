@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+// Fake `flutter` CLI that speaks the `--machine` protocol closely enough for tests.
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
+const args = process.argv.slice(2);
+const logFile = process.env.FAKE_FLUTTER_LOG;
+
+if (args.includes('devices')) {
+  process.stdout.write(JSON.stringify([
+    { id: 'emu-1', name: 'iPhone 15 Simulator', targetPlatform: 'ios', emulator: true },
+    { id: 'macos', name: 'macOS', targetPlatform: 'darwin', emulator: false },
+  ]) + '\n');
+  process.exit(0);
+}
+
+if (args.includes('screenshot')) {
+  const out = args[args.indexOf('-o') + 1];
+  fs.writeFileSync(out, 'PNG');
+  process.exit(0);
+}
+
+// `flutter --suppress-analytics run --machine -d <id>`
+if (args.includes('run') && args.includes('--machine')) {
+  process.stdout.write('Launching lib/main.dart on iPhone 15 in debug mode...\n'); // non-JSON banner
+  process.stdout.write(JSON.stringify([{ event: 'app.start', params: { appId: 'APP-42', deviceId: 'emu-1' } }]) + '\n');
+  process.stdout.write(JSON.stringify([{ event: 'app.started', params: { appId: 'APP-42' } }]) + '\n');
+
+  const rl = readline.createInterface({ input: process.stdin });
+  rl.on('line', (line) => {
+    if (logFile) fs.appendFileSync(logFile, line + '\n');
+    let msgs; try { msgs = JSON.parse(line); } catch { return; }
+    for (const m of msgs) {
+      if (m.method === 'app.stop') {
+        process.stdout.write(JSON.stringify([{ id: m.id, result: true }]) + '\n');
+        process.exit(0);
+      }
+      // Simulate a compile error on the next reload when the flag file exists.
+      const failFlag = process.env.FAKE_FLUTTER_FAIL_FLAG;
+      if (m.method === 'app.restart' && failFlag && fs.existsSync(failFlag)) {
+        fs.unlinkSync(failFlag);
+        process.stdout.write(JSON.stringify([{ id: m.id, result: { code: 1, message: 'lib/main.dart:3:1: Error: Expected a declaration.' } }]) + '\n');
+        continue;
+      }
+      process.stdout.write(JSON.stringify([{ id: m.id, result: { code: 0, message: 'ok', method: m.method } }]) + '\n');
+    }
+  });
+  return;
+}
+
+process.stderr.write('fake flutter: unsupported args ' + args.join(' ') + '\n');
+process.exit(1);

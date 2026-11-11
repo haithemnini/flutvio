@@ -1,0 +1,142 @@
+{
+  "name": "flutvio",
+  "version": "0.1.0",
+  "description": "Terminal-first macOS workspace for Flutter: any AI coding agent, wired to the iOS Simulator",
+  "main": "./out/main/index.js",
+  "homepage": "https://github.com/haithemnini/flutvio",
+  "author": "Haithem Nini",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "tsx scripts/test-rtl-preprocess.ts && tsx scripts/test-flutter-daemon.ts && tsx scripts/test-worktrees.ts && tsx scripts/test-git.ts && tsx scripts/test-graph.ts && tsx scripts/test-agent-bridge.ts && tsx scripts/test-shortcuts.ts && tsx scripts/test-agent-monitor.ts",
+    "rebuild": "electron-rebuild -f -w node-pty",
+    "test:daemon": "tsx scripts/test-flutter-daemon.ts",
+    "dist": "electron-vite build && electron-builder --mac"
+  },
+  "dependencies": {
+    "@electron-toolkit/utils": "^3.0.0",
+    "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@grpc/grpc-js": "^1.14.7",
+    "@grpc/proto-loader": "^0.8.1",
+    "@monaco-editor/react": "^4.6.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-unicode11": "^0.8.0",
+    "@xterm/addon-web-links": "^0.11.0",
+    "@xterm/xterm": "^5.5.0",
+    "bidi-js": "^1.0.3",
+    "node-pty": "^1.1.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@electron-toolkit/tsconfig": "^1.0.0",
+    "@electron/rebuild": "^3.6.0",
+    "@types/node": "^20.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.19",
+    "electron": "^45.2.3",
+    "electron-builder": "^24.13.0",
+    "electron-vite": "^2.3.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.3.0"
+  },
+  "build": {
+    "appId": "app.flutvio.ide",
+    "productName": "Flutvio",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "resources/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "darkModeSupport": true
+    },
+    "extraResources": [
+      {
+        "from": "resources/idb.desc",
+        "to": "idb.desc"
+      },
+      {
+        "from": "resources/bin",
+        "to": "bin"
+      }
+    ],
+    "copyright": "Copyright © 2026 Haithem Nini",
+    "directories": {
+      "output": "release",
+      "buildResources": "resources"
+    },
+    "files": [
+      "out/**",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "**/node_modules/node-pty/**"
+    ],
+    "artifactName": "Flutvio-${version}-mac-${arch}.${ext}",
+    "dmg": {
+      "title": "Flutvio ${version}",
+      "contents": [
+        {
+          "x": 150,
+          "y": 190
+        },
+        {
+          "x": 390,
+          "y": 190,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "afterPack": "scripts/after-pack.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haithemnini/flutvio.git",
+    "directory": "flutvio-ide"
+  },
+  "bugs": {
+    "url": "https://github.com/haithemnini/flutvio/issues"
+  },
+  "keywords": [
+    "flutter",
+    "dart",
+    "macos",
+    "electron",
+    "terminal",
+    "ide",
+    "ai-agents",
+    "claude-code",
+    "ios-simulator",
+    "hot-reload"
+  ]
+}
